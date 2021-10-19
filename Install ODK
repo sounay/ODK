@@ -1,0 +1,25 @@
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+apt-cache policy docker-ce
+
+
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+docker-compose --version
+git clone https://github.com/getodk/central
+cd central
+git submodule update -i
+mv .env.template .env
+sudo nano .env
+docker-compose build
+docker-compose up --no-start
+docker-compose up -d
+
+#create admin
+docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-create
+docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-promote
+
+#reset password
+docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-set-password
